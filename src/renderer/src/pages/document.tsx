@@ -1,11 +1,20 @@
-import { Link } from "react-router-dom";
+import { ToC } from '../components/ToC'
 
 export function Document() {
     return (
-        <main className="flex-1 flex items-center justify-center text-rotion-400">
-            Selecione ou crie um documento
+        <main className="flex-1 flex py-12 px-10 gap-8">
+            <aside className="hidden lg:block sticky top-0">
+                <span className="text-rotion-300 font-semibold text-xs">
+                    TABLE OF CONTENT
+                </span>
 
-            <Link to="/">Blank</Link>
+                <ToC.Root>
+                    <ToC.Link>
+                        Back-end
+                    </ToC.Link>
+                </ToC.Root>
+
+            </aside>
         </main>
     )
 }
