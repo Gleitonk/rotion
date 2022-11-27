@@ -3,6 +3,9 @@ import * as path from 'path'
 import { createFileRoute, createURLRoute } from 'electron-router-dom'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
+import './ipc'
+import './store'
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -18,8 +21,8 @@ function createWindow(): void {
     },
     ...(process.platform === 'linux'
       ? {
-          icon: path.join(__dirname, '../../build/icon.png'),
-        }
+        icon: path.join(__dirname, '../../build/icon.png'),
+      }
       : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),

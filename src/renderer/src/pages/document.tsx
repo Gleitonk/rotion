@@ -1,3 +1,4 @@
+import { Editor } from '../components/Editor'
 import { ToC } from '../components/ToC'
 
 export function Document() {
@@ -9,12 +10,18 @@ export function Document() {
                 </span>
 
                 <ToC.Root>
-                    <ToC.Link>
-                        Back-end
-                    </ToC.Link>
+                    <ToC.Link>Back-end</ToC.Link>
+                    <ToC.Section>
+                        <ToC.Link>Back-end</ToC.Link>
+                        <ToC.Link>Autenticação</ToC.Link>
+                    </ToC.Section>
                 </ToC.Root>
 
             </aside>
+
+            <section className='flex-1 flex flex-col items-center'>
+                <Editor />
+            </section>
         </main>
     )
 }
