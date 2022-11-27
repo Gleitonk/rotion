@@ -4,7 +4,17 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-export function Editor() {
+export interface OnContentupdateParams {
+    title: string
+    content: string
+}
+
+interface EditorProps {
+    content: string
+    onContentUpdated: (params: OnContentupdateParams) => void
+}
+
+export function Editor({ content, onContentUpdated }: EditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -19,7 +29,19 @@ export function Editor() {
                 content: 'heading block*'
             })
         ],
-        content: '<h1>Back-end</h1><p>Arnarujena vragest soldata</p>',
+        onUpdate: ({ editor }) => {
+            const contentRegex = /(<h1>(?<title>.+)<\/h1>(?<content>.+)?)/
+            const parsedContent = editor.getHTML().match(contentRegex)?.groups
+
+            const title = parsedContent?.title ?? 'Untitled'
+            const content = parsedContent?.content ?? ''
+
+            onContentUpdated({
+                title,
+                content
+            })
+        },
+        content,
         autofocus: 'end',
         editorProps: {
             attributes: {
@@ -27,6 +49,7 @@ export function Editor() {
             }
         }
     })
+
 
     return (
         <EditorContent className="w-[65ch]" editor={editor} />
