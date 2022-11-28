@@ -1,22 +1,19 @@
 import { ipcMain } from 'electron'
-import { randomUUID } from 'crypto'
-import { IPC } from '@shared/constants/ipc'
-
+import { randomUUID } from 'node:crypto'
+import { store } from './store'
+import { IPC } from '@shared/constants'
 import {
   CreateDocumentResponse,
-  DeleteDocumentRequest,
-  Document,
-  FetchAllDocumentsResponse,
-  FetchDocumentRequest,
-  FetchDocumentResponse,
-  SaveDocumentRequest,
-} from '@shared/types/ipc'
-
-import { store } from './store'
+  DeleteDocumentArgs,
+  GetAllDocumentsResponse,
+  GetDocumentArgs,
+  GetDocumentResponse,
+  SaveDocumentArgs,
+} from '@shared/types'
 
 ipcMain.handle(
-  IPC.DOCUMENTS.FETCH_ALL,
-  async (): Promise<FetchAllDocumentsResponse> => {
+  IPC.DOCUMENTS.GET_ALL,
+  async (): Promise<GetAllDocumentsResponse> => {
     return {
       data: Object.values(store.get('documents')),
     }
@@ -24,12 +21,12 @@ ipcMain.handle(
 )
 
 ipcMain.handle(
-  IPC.DOCUMENTS.FETCH,
-  async (_, { id }: FetchDocumentRequest): Promise<FetchDocumentResponse> => {
-    const document = store.get(`documents.${id}`) as Document
+  IPC.DOCUMENTS.GET,
+  async (_, args: GetDocumentArgs): Promise<GetDocumentResponse> => {
+    const { id } = args
 
     return {
-      data: document,
+      data: store.get(`documents.${id}`),
     }
   },
 )
@@ -39,12 +36,14 @@ ipcMain.handle(
   async (): Promise<CreateDocumentResponse> => {
     const id = randomUUID()
 
-    const document: Document = {
-      id,
-      title: 'Untitled',
-    }
+    const documents = store.get('documents')
 
-    store.set(`documents.${id}`, document)
+    const document = { id, title: 'Untitled' }
+
+    documents[id] = document
+
+    store.set('documents', documents)
+
     return {
       data: document,
     }
@@ -53,7 +52,9 @@ ipcMain.handle(
 
 ipcMain.handle(
   IPC.DOCUMENTS.SAVE,
-  async (_, { id, title, content }: SaveDocumentRequest): Promise<void> => {
+  async (_, args: SaveDocumentArgs): Promise<void> => {
+    const { id, title, content } = args
+
     store.set(`documents.${id}`, {
       id,
       title,
@@ -64,8 +65,10 @@ ipcMain.handle(
 
 ipcMain.handle(
   IPC.DOCUMENTS.DELETE,
-  async (_, { id }: DeleteDocumentRequest): Promise<void> => {
-    // @ts-ignore
+  async (_, args: DeleteDocumentArgs): Promise<void> => {
+    const { id } = args
+
+    // @ts-ignore (https://github.com/sindresorhus/electron-store/issues/196)
     store.delete(`documents.${id}`)
   },
 )

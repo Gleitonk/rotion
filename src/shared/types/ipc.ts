@@ -8,25 +8,25 @@ export interface Document {
  * Request
  */
 
-export interface FetchDocumentRequest {
+export type SaveDocumentArgs = Document
+
+export interface GetDocumentArgs {
   id: string
 }
 
-export interface DeleteDocumentRequest {
+export interface DeleteDocumentArgs {
   id: string
 }
-
-export interface SaveDocumentRequest extends Document {}
 
 /**
  * Response
  */
 
-export interface FetchAllDocumentsResponse {
+export interface GetAllDocumentsResponse {
   data: Document[]
 }
 
-export interface FetchDocumentResponse {
+export interface GetDocumentResponse {
   data: Document
 }
 
