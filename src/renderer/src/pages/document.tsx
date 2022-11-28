@@ -2,37 +2,39 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { Document as DocumentProps } from '@shared/types/ipc'
-import { Editor, OnContentupdateParams } from '../components/Editor'
+import { Editor, OnContentUpdatedParams } from '../components/Editor'
 import { ToC } from '../components/ToC'
 
 export function Document() {
     const { id } = useParams<{ id: string }>()
     const queryClient = useQueryClient()
 
-
-    const { data, isFetching } = useQuery(['document'], async () => {
+    const { data, isFetching } = useQuery(['document', id], async () => {
         const response = await window.api.fetchDocument({ id: id! })
+
         return response.data
     })
 
-    const { mutateAsync: savedocument } = useMutation(async ({ title, content }: OnContentupdateParams) => {
-        await window.api.saveDocument({
-            id: id!,
-            title,
-            content
-        })
-    }, {
-        onSuccess: (_, { title }) => {
-            queryClient.setQueryData<DocumentProps[]>(['documents'], (documents) => {
-                return documents?.map(document => {
-                    if (document.id === id) {
-                        return [...documents, title]
-                    }
-                    return document
-                })
+    const { mutateAsync: saveDocument } = useMutation(
+        async ({ title, content }: OnContentUpdatedParams) => {
+            await window.api.saveDocument({
+                id: id!,
+                title,
+                content,
             })
-        }
-    })
+        },
+        {
+            onSuccess: (_, { title }) => {
+                queryClient.setQueryData<DocumentProps[]>(['documents'], (documents) => {
+                    return documents?.map(document => {
+                        if (document.id === id) {
+                            return { ...document, title }
+                        }
+                        return document
+                    })
+                })
+            }
+        })
 
     const initialContent = useMemo(() => {
         if (data) {
@@ -41,8 +43,8 @@ export function Document() {
         return ''
     }, [data])
 
-    function handleEditorContentUpdated({ title, content }: OnContentupdateParams) {
-        savedocument({ title, content })
+    function handleEditorContentUpdated({ title, content }: OnContentUpdatedParams) {
+        saveDocument({ title, content })
     }
 
     return (
@@ -53,7 +55,7 @@ export function Document() {
                 </span>
 
                 <ToC.Root>
-                 
+
                 </ToC.Root>
 
             </aside>

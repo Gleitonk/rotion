@@ -10,7 +10,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ onOpenChange, open }: SearchBarProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -26,7 +26,7 @@ export function SearchBar({ onOpenChange, open }: SearchBarProps) {
   const { data } = useQuery(['documents'], async () => {
     const response = await window.api.fetchDocuments()
     return response.data
-  });
+  })
 
   function handleOpenDocument(id: string) {
     navigate(`documents/${id}`)
@@ -53,18 +53,18 @@ export function SearchBar({ onOpenChange, open }: SearchBarProps) {
           Nenhum documento encontrado.
         </Command.Empty>
 
-        {data?.map(document => {
+        {data?.map((document) => {
           return (
             <Command.Item
               key={document.id}
               onSelect={() => handleOpenDocument(document.id)}
-              className="py-3 px-4 text-rotion-50 text-sm flex items-center gap-2 hover:bg-rotion-600">
+              className="py-3 px-4 text-rotion-50 text-sm flex items-center gap-2 hover:bg-rotion-600"
+            >
               <File className="w-4 h-4" />
               {document.title}
             </Command.Item>
           )
         })}
-
       </Command.List>
     </Command.Dialog>
   )

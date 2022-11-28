@@ -3,7 +3,7 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import * as Navigation from './Navigation'
 import clsx from 'clsx'
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query'
 
 import { CaretDoubleLeft } from 'phosphor-react'
 import { CreatePage } from './CreatePage'
@@ -16,7 +16,7 @@ export function Sidebar() {
   const { data } = useQuery(['documents'], async () => {
     const response = await window.api.fetchDocuments()
     return response.data
-  });
+  })
 
   return (
     <Collapsible.Content className="bg-rotion-800 flex-shrink-0 border-r border-rotion-600 h-screen relative group data-[state=open]:animate-slideIn data-[state=closed]:animate-slideOut overflow-hidden">
@@ -53,14 +53,16 @@ export function Sidebar() {
         <Navigation.Root>
           <Navigation.Section>
             <Navigation.SectionTitle>Workspace</Navigation.SectionTitle>
-            <Navigation.SectionContent>
-              {data?.map(document => {                
-                return <Navigation.Link
-                  to={`/documents/${document.id}`}
-                  key={document.id}
-                >
-                  {document.title}
-                </Navigation.Link>
+            <Navigation.SectionContent> 
+              {data?.map((document) => {
+                return (
+                  <Navigation.Link
+                    key={document.id}
+                    to={`/documents/${document.id}`}
+                  >
+                    {document.title}
+                  </Navigation.Link>
+                )
               })}
             </Navigation.SectionContent>
           </Navigation.Section>

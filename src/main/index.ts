@@ -23,8 +23,8 @@ function createWindow(): void {
     },
     ...(process.platform === 'linux'
       ? {
-        icon: path.join(__dirname, '../../build/icon.png'),
-      }
+          icon: path.join(__dirname, '../../build/icon.png'),
+        }
       : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),

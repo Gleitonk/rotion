@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react'
 import tailwind from 'tailwindcss'
 
 const tsConfigPaths = tsConfigPathsPlugin({
-  projects: [path.resolve('tsconfig.json')]
+  projects: [path.resolve('tsconfig.json')],
 })
 
 export default defineConfig({

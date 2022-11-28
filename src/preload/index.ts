@@ -1,7 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 import { IPC } from '@shared/constants/ipc'
-import { CreateDocumentResponse, DeleteDocumentRequest, FetchAllDocumentsResponse, FetchDocumentRequest, FetchDocumentResponse, SaveDocumentRequest } from '@shared/types/ipc'
+import {
+  CreateDocumentResponse,
+  DeleteDocumentRequest,
+  FetchAllDocumentsResponse,
+  FetchDocumentRequest,
+  FetchDocumentResponse,
+  SaveDocumentRequest,
+} from '@shared/types/ipc'
 
 declare global {
   interface Window {
@@ -35,7 +42,7 @@ const api = {
     ipcRenderer.on(IPC.DOCUMENTS.NEW_DOCUMENT, callback)
 
     return () => ipcRenderer.off(IPC.DOCUMENTS.NEW_DOCUMENT, callback)
-  }
+  },
 }
 
 if (process.contextIsolated) {

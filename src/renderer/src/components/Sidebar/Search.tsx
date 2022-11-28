@@ -19,10 +19,7 @@ export function Search() {
         Busca rápida
       </button>
 
-      <SearchBar
-        open={isSearchBarOpen}
-        onOpenChange={handleOpenChange}
-      />
+      <SearchBar open={isSearchBarOpen} onOpenChange={handleOpenChange} />
     </>
   )
 }
