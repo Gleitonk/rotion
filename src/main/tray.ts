@@ -23,7 +23,7 @@ export function createTray(window: BrowserWindow) {
     },
     {
       label: 'Documentos recentes',
-      click: () => window.webContents.send('new-document'),
+      enabled: false
     },
     {
       label: 'Rotion',
